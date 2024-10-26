@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}SEP{% endblock %}
+
+{% block content %}
+<div class="centered">
+    <div class="form">
+        <h3 class="text-center form-title">Login</h3>
+        <form method="POST">
+            {% csrf_token %}
+
+            {% for error in form.non_field_errors %}
+                <small class="error">{{ error }}</small>
+            {% endfor %}
+
+            {% for field in form %}
+                {% for error in field.errors.all %}
+                    <small class="error">{{ error }}</small>
+                {% endfor %}
+                <div class="input-field">
+                    {{ field.label_tag }} <br />
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <div class="submit-button-wrapper">
+                <button type="submit" class="submit-button">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

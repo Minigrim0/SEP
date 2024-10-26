@@ -1,0 +1,21 @@
+<!!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+    <head>
+        <title>{% block title %}SEP{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        {% block extrahead %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        {% block extrajs %}
+        {% endblock %}
+    </body>
+</html>

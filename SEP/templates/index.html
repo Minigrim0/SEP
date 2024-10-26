@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}SEP{% endblock %}
+
+{% block content %}
+<small class="employee-button">
+    <a href="{% url 'employee_home' %}">Employee site</a>
+</small>
+<h1 class="text-center">Welcome to the SEP website!</h1>
+
+<div class="centered">
+    <div class="form">
+        <h3 class="text-center form-title">Organise a new event !</h3>
+        {% csrf_token %}
+
+        {% for field in form %}
+            <small class="error">{{ field.errors }}</small>
+            <div>
+                {{ field.label_tag }} <br />
+                {{ field }}
+            </div>
+        {% endfor %}
+
+        <div class="submit-button-wrapper">
+            <button type="submit" class="submit-button">Submit</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
