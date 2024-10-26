@@ -1,0 +1,9 @@
+[project]
+name = "SEP"
+version = "0.1.0"
+description = "Swedish Event Planners"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1.2",
+]
