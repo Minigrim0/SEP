@@ -1,5 +1,6 @@
 from django.core import validators
 from django.db import models
+from django.utils import timezone
 
 
 class RawRequest(models.Model):
@@ -25,7 +26,7 @@ class Meeting(models.Model):
 
 
 class Project(models.Model):
-    status_choices = [
+    STATUS_CHOICES = [
         ("draft", "DRAFT"),  # Initial state, the CS team Started filling the form
         ("pending", "PENDING"),  # The CS team filled the form from the client request
         ("cs_approved", "APPROVED BY CUSTOMER SERVICE"),  # The CS Senior approved the project
@@ -45,12 +46,15 @@ class Project(models.Model):
     estimated_budget = models.IntegerField(verbose_name="Initial budget estimation", validators=[validators.MinValueValidator(0)], blank=True, null=True)
 
     # Information on the project status
-    status = models.CharField(verbose_name="project status", max_length=20, choices=status_choices, default="draft", blank=True, null=True)
+    status = models.CharField(verbose_name="project status", max_length=20, choices=STATUS_CHOICES, default="draft", blank=True, null=True)
 
     financial_feedback = models.TextField(verbose_name="feedback from financial dpt.", blank=True, null=True)
 
     meeting = models.OneToOneField("project.Meeting", verbose_name="Initial client meeting", on_delete=models.CASCADE, blank=True, null=True)
 
+    created_by = models.ForeignKey("SEP.Employee", on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.status_display} - {self.title}"
+        return f"{self.status} - {self.title}"

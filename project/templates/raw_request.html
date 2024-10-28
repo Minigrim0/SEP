@@ -1,6 +1,50 @@
-{% extends "base.html" %}
+{% extends "employee.html" %}
 
-{% block content %}
-    Display the raw request with a form beside to create a project
-    {{ project_form }}
+{% block employee_dashboard %}
+    <div class="content-50 content-row-2 mt-2">
+        <div class="project-form br">
+            <h3>Project Form</h3>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for field in project_form %}
+                    <div>
+                        {{ field.label_tag }} <br />
+                        {{ field }}
+                    </div>
+                    {% for error in field.errors %}
+                        <div class="error">
+                            <p>{{ error }}</p>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="form-action-buttons">
+                    <div class="submit-button-wrapper">
+                        <button type="submit" name="save_draft" class="submit-button">Save draft</button>
+                    </div>
+                    <div class="submit-button-wrapper">
+                        <button type="submit" name="publish_project" class="submit-button">Publish</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="raw-request">
+            <h3>Client request #{{ raw_request.id }}</h3>
+            <h4>{{ raw_request.title }}</h4>
+            <p>{{ raw_request.name }} - {{ raw_request.phone }} - {{ raw_request.email }}</p>
+            <p>{{ raw_request.address }}</p>
+            <p>{{ raw_request.description }}</p>
+            <p>Initial available budget: {{ raw_request.available }}</p>
+        </div>
+    </div>
 {% endblock %}

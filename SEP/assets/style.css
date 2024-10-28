@@ -94,15 +94,30 @@ body h1 {
     grid-gap: 1rem;
 }
 
+.content-row-2 {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 1rem;
+}
+
+.content-row-2 div {
+    padding: 0 1rem;
+}
+
 .employee-column {
     min-height: 80vh;
+}
+
+.employee-column table {
+    width: 90%;
+    margin: 0 auto;
 }
 
 table, th, td {
     border: 1px solid;
 }
 
-td {
+th {
     width: 30%;
 }
 
@@ -120,4 +135,23 @@ td {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.content-50 {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.br {
+    border-right: 1px dashed #000;
+}
+
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.form-action-buttons {
+    display: flex;
+    justify-content: end;
 }

@@ -4,23 +4,61 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from project.models import RawRequest, Project
+from project.models import RawRequest
 from project.forms import ProjectInitialForm
+
+from SEP.models import Customer
 
 # Create your views here.
 @login_required
 def create_project_from_raw(request, id: int):
     raw_request = get_object_or_404(RawRequest, id=id)
 
-    # Get data from existing draft project if it exists
     try:
-        if raw_request.project.status != "DRAFT":
-            messages.error(request, "You cannot modify this request anymore.")
-            return HttpResponseRedirect(reverse("project:employee_home"))
-
-        project_form = ProjectInitialForm(instance=project.ref_project)
+        project = raw_request.project
     except RawRequest.project.RelatedObjectDoesNotExist:
-        project_form = ProjectInitialForm(initial={"estimated_budget": raw_request.available})
+        project = None
+
+    if request.method == "POST":
+        project_form = ProjectInitialForm(request.POST, instance=project)
+
+        if project_form.is_valid():
+            # Do not commit to avoid IntegrityError
+            project = project_form.save(commit=False)
+            project.created_by = request.user
+
+            if project.initial_request is None:
+                project.initial_request = raw_request
+
+            if "save_draft" in request.POST:
+                project.status = "draft"
+                messages.success(request, "Draft saved !")
+            elif "publish_project" in request.POST:
+                project.status = "pending"
+                messages.success(request, "Project sent to the CS manager !")
+            project.save()
+
+            return HttpResponseRedirect(reverse("employee_home"))
+        else:
+            messages.error(request, "Please correct the errors below.")
+
+    # Get data from existing draft project if it exists
+    if project is not None:
+        if project.status != "draft":
+            messages.error(request, "You cannot modify this request anymore.")
+            return HttpResponseRedirect(reverse("employee_home"))
+
+        project_form = ProjectInitialForm(instance=project)
+    else:
+        project_form = ProjectInitialForm(initial={
+            "estimated_budget": raw_request.available,
+            "client": Customer.objects.get_or_create(
+                name=raw_request.name,
+                email=raw_request.email,
+                phone=raw_request.phone,
+                address=raw_request.address,
+            )[0],
+        })
 
     context = {
         "raw_request": raw_request,

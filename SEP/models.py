@@ -31,3 +31,6 @@ class Employee(AbstractUser):
 
     def __str__(self) -> str:
         return f"{self.last_name} - {self.first_name} - {self.role.name}"
+
+    def amount_of_projects(self) -> int:
+        return self.project_set.count()

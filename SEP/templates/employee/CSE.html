@@ -2,13 +2,14 @@
 
 {% block employee_dashboard %}
 
-<div class="content row-3">
+<div class="content-row-3">
     <div class="employee-column">
         <h3>Client requests</h3>
         <table class="raw-request-table">
             <tr>
                 <th>Client</th>
                 <th>Request</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             {% for raw_request in raw_requests %}
@@ -16,12 +17,86 @@
                     <td>{{ raw_request.name }}</td>
                     <td>{{ raw_request.title }}</td>
                     <td>
+                        {% if raw_request.project %}
+                            DRAFT
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
                         <a href="{% url 'project:project_from_raw' raw_request.id %}">
                             <button class="centered">Review</button>
                         </a>
                     </td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        Good work, nothing to do !
+                    </td>
+                </tr>
             {% endfor %}
+        </table>
+        <small>Tranform these requests into fully fledged projects.</small>
+    </div>
+    <div class="employee-column">
+        <h3>Filled projects</h3>
+        <table class="project-table">
+            <tr>
+                <th>Title</th>
+                <th>Client</th>
+                <th>Status</th>
+            </tr>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.client.name }}</td>
+                    <td>{{ project.title }}</td>
+                    <td>
+                        {{ project.get_status_display }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">
+                        No project yet !
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <small>These are the projects that you filled and that are waiting to be completed.</small>
+    </div>
+    <div class="employee-column">
+        <h3>Profile</h3>
+        <table class="project-table">
+            <tr>
+                <th colspan="2">Profile</th>
+            </tr>
+            <tr>
+                <td>First name</td>
+                <td>{{ user.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Last name</td>
+                <td>{{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Role</td>
+                <td>{{ user.role }}</td>
+            </tr>
+            <tr>
+                <td>Employee since</td>
+                <td>{{ user.date_joined }}</td>
+            </tr>
+            <tr>
+                <td>Last login</td>
+                <td>{{ user.last_login }}</td>
+            </tr>
+            <tr>
+                <td>Projects initiated</td>
+                <td>{{ user.amount_of_projects }}</td>
+            </tr>
+        </table>
+        <small>This is your profile.</small>
     </div>
 </div>
 
