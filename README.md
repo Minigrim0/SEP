@@ -2,10 +2,12 @@
 This project uses the `uv` python version manager.
 
 ## Installation
+Make sureto have `uv` installed locally ([website](https://docs.astral.sh/uv/))
+
 ```bash
-uv run manage.py migrate
-uv run manage.py createsuperuser --username $USER
-uv run manage.py runserver
+uv run manage.py migrate  # Create the database schema (by default sqlite)
+uv run manage.py createsuperuser --username $USER  # Create a superuser to naviguate the site, the user is a CS employee by default
+uv run manage.py runserver  # Runs the server locally
 ```
 
 and then naviguate to [http://127.0.0.1:8000](http://127.0.0.1:8000)
