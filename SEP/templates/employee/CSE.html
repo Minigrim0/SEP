@@ -1,0 +1,28 @@
+{% extends "employee.html" %}
+
+{% block employee_dashboard %}
+
+<div class="content row-3">
+    <div class="employee-column">
+        <h3>Client requests</h3>
+        <table class="raw-request-table">
+            <tr>
+                <th>Client</th>
+                <th>Request</th>
+                <th>Actions</th>
+            </tr>
+            {% for raw_request in raw_requests %}
+                <tr>
+                    <td>{{ raw_request.name }}</td>
+                    <td>{{ raw_request.title }}</td>
+                    <td>
+                        <a href="{% url 'project:project_from_raw' raw_request.id %}">
+                            <button class="centered">Review</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -12,15 +12,22 @@ class Customer(models.Model):
 
 
 class Role(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
+    id = models.CharField(max_length=3, primary_key=True)
 
     def __str__(self) -> str:
         return self.name
 
 
 class Employee(AbstractUser):
-    name = models.CharField(max_length=100)
     role = models.ForeignKey("SEP.Role", on_delete=models.CASCADE)
 
+    def save(self, *args, **kwargs):
+        """Add a default role if needed."""
+
+        if not self.pk:
+            self.role = Role.objects.get_or_create(id="CSE", name="Customer Service Employee")[0]
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
-        return self.name
+        return f"{self.last_name} - {self.first_name} - {self.role.name}"

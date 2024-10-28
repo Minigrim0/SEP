@@ -11,19 +11,34 @@
 <div class="centered">
     <div class="form">
         <h3 class="text-center form-title">Organise a new event !</h3>
-        {% csrf_token %}
 
-        {% for field in form %}
-            <small class="error">{{ field.errors }}</small>
-            <div>
-                {{ field.label_tag }} <br />
-                {{ field }}
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div>
+                    {{ field.label_tag }} <br />
+                    {{ field }}
+                </div>
+                {% for error in field.errors %}
+                    <div class="error">
+                        <p>{{ error }}</p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="submit-button-wrapper">
+                <button type="submit" class="submit-button">Submit</button>
             </div>
-        {% endfor %}
-
-        <div class="submit-button-wrapper">
-            <button type="submit" class="submit-button">Submit</button>
-        </div>
+        </form>
     </div>
 </div>
 

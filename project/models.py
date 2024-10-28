@@ -1,3 +1,4 @@
+from django.core import validators
 from django.db import models
 
 
@@ -10,7 +11,7 @@ class RawRequest(models.Model):
     address = models.CharField(max_length=200)
     title = models.CharField(max_length=100)
     description = models.TextField()
-    available = models.DecimalField(max_digits=10, decimal_places=2)
+    available = models.IntegerField(verbose_name="Available budget", validators=[validators.MinValueValidator(0)])
 
 
 class Meeting(models.Model):
@@ -25,7 +26,8 @@ class Meeting(models.Model):
 
 class Project(models.Model):
     status_choices = [
-        ("pending", "PENDING"),  # Initial state, the CS team filled the form from the client request
+        ("draft", "DRAFT"),  # Initial state, the CS team Started filling the form
+        ("pending", "PENDING"),  # The CS team filled the form from the client request
         ("cs_approved", "APPROVED BY CUSTOMER SERVICE"),  # The CS Senior approved the project
         ("cs_rejected", "REJECTED BY CUSTOMER SERVICE"),  # The CS Senior approved the project
         ("fin_review", "REVIEWED BY THE FINANCIAL MANAGER"),  # The financial manager reviewed the project and wrote some feedback
@@ -34,16 +36,16 @@ class Project(models.Model):
     ]
 
     # Information on the client
-    client = models.ForeignKey("SEP.Customer", verbose_name="Project client", on_delete=models.CASCADE)
-    initial_request = models.OneToOneField("project.RawRequest", verbose_name="Initial request", on_delete=models.CASCADE)
+    client = models.ForeignKey("SEP.Customer", verbose_name="Project client", blank=True, null=True, on_delete=models.CASCADE)
+    initial_request = models.OneToOneField("project.RawRequest", verbose_name="Initial request", blank=True, null=True, on_delete=models.CASCADE)
 
     # Information on the project
     title = models.CharField(verbose_name="Project Title", max_length=100)
-    description = models.TextField(verbose_name="Project Description")
-    estimated_budget = models.DecimalField(verbose_name="Initial budget estimation", max_digits=10, decimal_places=2)
+    description = models.TextField(verbose_name="Project Description", blank=True, null=True)
+    estimated_budget = models.IntegerField(verbose_name="Initial budget estimation", validators=[validators.MinValueValidator(0)], blank=True, null=True)
 
     # Information on the project status
-    status = models.CharField(verbose_name="project status", max_length=20, choices=status_choices, default="pending")
+    status = models.CharField(verbose_name="project status", max_length=20, choices=status_choices, default="draft", blank=True, null=True)
 
     financial_feedback = models.TextField(verbose_name="feedback from financial dpt.", blank=True, null=True)
 
