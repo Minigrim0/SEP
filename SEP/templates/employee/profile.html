@@ -1,0 +1,42 @@
+<div class="employee-column">
+    <h3>Profile</h3>
+    <table class="project-table">
+        <tr>
+            <th colspan="2">Profile</th>
+        </tr>
+        <tr>
+            <td>First name</td>
+            <td>{{ user.first_name }}</td>
+        </tr>
+        <tr>
+            <td>Last name</td>
+            <td>{{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td>{{ user.role }}</td>
+        </tr>
+        <tr>
+            <td>Employee since</td>
+            <td>{{ user.date_joined }}</td>
+        </tr>
+        <tr>
+            <td>Last login</td>
+            <td>{{ user.last_login }}</td>
+        </tr>
+        <tr>
+            <td>Projects initiated</td>
+            <td>{{ user.amount_of_projects }}</td>
+        </tr>
+        <tr>
+            <td>Actions</td>
+            <td>
+                <form action="{% url 'logout' %}?next={% url 'home' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <small>This is your profile.</small>
+</div>

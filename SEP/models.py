@@ -25,8 +25,12 @@ class Employee(AbstractUser):
     def save(self, *args, **kwargs):
         """Add a default role if needed."""
 
-        if not self.pk:
+        try:
+            if self.role is None:
+                self.role = Role.objects.get_or_create(id="CSE", name="Customer Service Employee")[0]
+        except Role.DoesNotExist:
             self.role = Role.objects.get_or_create(id="CSE", name="Customer Service Employee")[0]
+
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:

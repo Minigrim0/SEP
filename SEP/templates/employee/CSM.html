@@ -4,28 +4,27 @@
 
 <div class="content-row-3">
     <div class="employee-column">
-        <h3>Client requests</h3>
+        <h3>New projects</h3>
         <table class="raw-request-table">
             <tr>
                 <th>Client</th>
                 <th>Request</th>
-                <th>Status</th>
                 <th>Actions</th>
             </tr>
-            {% for raw_request in raw_requests %}
+            {% for project in waiting_approval %}
                 <tr>
-                    <td>{{ raw_request.name }}</td>
-                    <td>{{ raw_request.title }}</td>
-                    <td>
-                        {% if raw_request.project %}
-                            DRAFT
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.title }}</td>
                     <td>
                         <a href="{% url 'project:project_from_raw' raw_request.id %}">
-                            <button class="centered">Review</button>
+                            <button class="centered">Details</button>
+                        </a>
+
+                        <a href="{% url 'project:project_from_raw' raw_request.id %}">
+                            <button class="centered">Approve</button>
+                        </a>
+                        <a href="{% url 'project:project_from_raw' raw_request.id %}">
+                            <button class="centered">Reject</button>
                         </a>
                     </td>
                 </tr>
@@ -37,10 +36,10 @@
                 </tr>
             {% endfor %}
         </table>
-        <small>Tranform these requests into fully fledged projects.</small>
+        <small>Approve or disapprove of these projects.</small>
     </div>
     <div class="employee-column">
-        <h3>Filled projects</h3>
+        <h3>Projects History</h3>
         <table class="project-table">
             <tr>
                 <th>Title</th>
@@ -63,7 +62,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <small>These are the projects that you filled and that are waiting to be completed.</small>
+        <small>This is an historic of the last projects you approved or denied</small>
     </div>
     {% include "employee/profile.html" %}
 </div>

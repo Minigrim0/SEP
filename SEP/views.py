@@ -36,4 +36,10 @@ def employee_home(request):
         context["projects"] = Project.objects.filter(created_by=request.user).exclude(status="draft").order_by("-created_at")
 
         return render(request, "employee/CSE.html", context=context)
+    elif request.user.role.id == "CSM":
+        context["waiting_approval"] = Project.objects.filter(status="pending")
+        context["project_history"] = Project.objects.exclude(status="draft").exclude(status="pending").order_by("-created_at")
+
+        return render(request, "employee/CSM.html", context=context)
+
     # TODO add conditions for other employee types
