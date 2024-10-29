@@ -25,10 +25,6 @@
             <td>{{ user.last_login }}</td>
         </tr>
         <tr>
-            <td>Projects initiated</td>
-            <td>{{ user.amount_of_projects }}</td>
-        </tr>
-        <tr>
             <td>Actions</td>
             <td>
                 <form action="{% url 'logout' %}?next={% url 'home' %}" method="post">
