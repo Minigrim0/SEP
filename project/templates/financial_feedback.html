@@ -1,0 +1,59 @@
+{% extends "employee.html" %}
+
+{% block page_title %}
+Financial feedback
+{% endblock %}
+
+{% block return_link %}
+    <a href="{% url 'employee_home' %}">Employee Homepage</a>
+{% endblock %}
+
+{% block employee_dashboard %}
+<div class="content-50 content-row-2 mt-2">
+    <div class="project-form br">
+        <table>
+            <tr>
+                <td>Client</td>
+                <td>{{ project.client.name }} - {{ project.client.email }}</td>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td>{{ project.title }}</td>
+            </tr>
+            <tr>
+                <td>Budget</td>
+                <td>{{ project.estimated_budget }}€</td>
+            </tr>
+            <tr>
+                <td>description</td>
+                <td>{{ project.description }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="raw-request">
+        <form method="POST">
+            {% csrf_token %}
+
+            {% for field in feedback_form %}
+                <div>
+                    {{ field.label_tag }} <br />
+                    {{ field }}
+                </div>
+                {% for error in field.errors %}
+                    <div class="error">
+                        <p>{{ error }}</p>
+                    </div>
+                {% endfor %}
+        {% endfor %}
+            <div class="form-action-buttons">
+                <div class="submit-button-wrapper">
+                    <button type="submit" name="save_draft" class="submit-button">Save draft</button>
+                </div>
+                <div class="submit-button-wrapper">
+                    <button type="submit" name="publish_feedback" class="submit-button">save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

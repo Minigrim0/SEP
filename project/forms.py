@@ -17,10 +17,15 @@ class ProjectInitialForm(forms.ModelForm):
     class Meta:
         model = Project
         # Only these fields are required to be filled by the CS employee
-        fields = ("title", "client", "description", "estimated_budget", )
         exclude = (
             "initial_request",
             "status",
             "financial_feedback",
             "meeting"
         )
+
+
+class FinancialFeedbackForm(forms.Form):
+    """Form for the financial manager to write feedback on a project"""
+
+    feedback = forms.CharField(widget=forms.Textarea)

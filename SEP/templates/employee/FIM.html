@@ -13,18 +13,11 @@
             </tr>
             {% for project in waiting_feedback %}
                 <tr>
-                    <td>{{ project.name }}</td>
+                    <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
                     <td>
-                        <a href="{% url 'project:project_from_raw' raw_request.id %}">
-                            <button class="centered">Details</button>
-                        </a>
-
-                        <a href="{% url 'project:project_from_raw' raw_request.id %}">
-                            <button class="centered">Approve</button>
-                        </a>
-                        <a href="{% url 'project:project_from_raw' raw_request.id %}">
-                            <button class="centered">Reject</button>
+                        <a href="{% url 'project:fin_action' project.id %}">
+                            <button class="centered">Write feedback</button>
                         </a>
                     </td>
                 </tr>
@@ -50,7 +43,7 @@
                 <tr>
                     <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
-                    <td>
+                    <td class="status-{{ project.status }}">
                         {{ project.get_status_display }}
                     </td>
                 </tr>

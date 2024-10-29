@@ -13,17 +13,17 @@
             </tr>
             {% for project in waiting_approval %}
                 <tr>
-                    <td>{{ project.name }}</td>
+                    <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
                     <td>
-                        <a href="{% url 'project:details' project.id %}">
+                        <a href="{% url 'project:project_detail' project.id %}">
                             <button class="centered">Details</button>
                         </a>
 
-                        <a href="">
+                        <a href="{% url 'project:adm_action' project.id %}?approve=1">
                             <button class="centered">Approve</button>
                         </a>
-                        <a href="">
+                        <a href="{% url 'project:adm_action' project.id %}?approve=0">
                             <button class="centered">Reject</button>
                         </a>
                     </td>
@@ -50,7 +50,7 @@
                 <tr>
                     <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
-                    <td>
+                    <td class="status-{{ project.status }}">
                         {{ project.get_status_display }}
                     </td>
                 </tr>

@@ -5,13 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from project.models import RawRequest, Project
-from project.forms import ProjectInitialForm
+from project.forms import ProjectInitialForm, FinancialFeedbackForm
 
 from SEP.models import Customer
 
-# Create your views here.
+
 @login_required
 def create_project_from_raw(request, id: int):
+    """Allows a CS employee to create a new project based on a raw request."""
+
     raw_request = get_object_or_404(RawRequest, id=id)
 
     try:
@@ -30,6 +32,7 @@ def create_project_from_raw(request, id: int):
             if project.initial_request is None:
                 project.initial_request = raw_request
 
+            # Either save the project as a draft or send it to the CS manager
             if "save_draft" in request.POST:
                 project.status = "draft"
                 messages.success(request, "Draft saved !")
@@ -43,16 +46,16 @@ def create_project_from_raw(request, id: int):
             messages.error(request, "Please correct the errors below.")
 
     # Get data from existing draft project if it exists
-    if project is not None:
+    elif project is not None:  # Get initial data from existing project
         if project.status != "draft":
             messages.error(request, "You cannot modify this request anymore.")
             return HttpResponseRedirect(reverse("employee_home"))
 
         project_form = ProjectInitialForm(instance=project)
-    else:
+    else:  # Create a new empty form that will create a new project once submitted
         project_form = ProjectInitialForm(initial={
-            "estimated_budget": raw_request.available,
-            "client": Customer.objects.get_or_create(
+            "estimated_budget": raw_request.available,  # Set the estimated budget to the available budget to avoid a step for the cs employee
+            "client": Customer.objects.get_or_create(  # try to find the customer, create it if it doesn't exist
                 name=raw_request.name,
                 email=raw_request.email,
                 phone=raw_request.phone,
@@ -67,13 +70,101 @@ def create_project_from_raw(request, id: int):
 
     return render(request, "raw_request.html", context=context)
 
+@login_required
+def project_list(request):
+    projects = Project.objects.all().order_by("created_at")
+    return render(request, "project_list.html", context={"projects": projects})
 
 @login_required
 def project_detail(request, project_id: int):
+    """Displays the details of a project.
+
+        TODO: Add actions to the page depending on the user's role and the project's status.
+    """
+
+    project = get_object_or_404(Project, id=project_id)
+    return render(request, "project_detail.html", context={"project": project})
+
+
+@login_required
+def csm_action(request, project_id: int):
+    """Allows the CSM to approve or reject a project"""
+
+    project = get_object_or_404(Project, id=project_id)
+    action = request.GET.get("approve", None)
+
+    if action is None:
+        messages.error(request, "Invalid action.")
+        # Redirect to the previous page or to the employee's home page
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", reverse("employee_home")))
+
+    if action == "1":
+        # Approve the project, push it to the next step.
+        project.status = "cs_approved"
+        project.save()
+        messages.success(request, "Project approved !")
+    else:
+        # Reject the project
+        project.status = "cs_rejected"
+        project.save()
+        messages.success(request, "Project rejected !")
+
+    return HttpResponseRedirect(reverse("employee_home"))
+
+
+@login_required
+def fin_action(request, project_id: int):
+    """Allows the finance manager to write feedback on the project before sending it to the administration manager"""
+
     project = get_object_or_404(Project, id=project_id)
 
-    context = {
-        "project": project,
-    }
+    if request.method == "POST":
+        form = FinancialFeedbackForm(request.POST)
+        if form.is_valid():
+            project.financial_feedback = form.cleaned_data.get("feedback", None)
 
-    return render(request, "project_detail.html", context=context)
+            if "save_draft" in request.POST:
+                # Just save the project as a draft
+                messages.success(request, "The feedback draft has been saved.")
+                project.financial_feedback_draft_status = True  # This is for visual porposes only
+            else:
+                # Save the feedback and forward the project to the administration manager
+                messages.success(request, "The feedback has been saved and sent to the administration departmenent.")
+                project.financial_feedback_draft_status = False
+                project.status = "fin_review"
+
+            project.save()
+            return HttpResponseRedirect(reverse("employee_home"))
+        else:
+            messages.error(request, "Please correct the error(s) below")
+
+    else:
+        form = FinancialFeedbackForm(initial={"feedback": project.financial_feedback})
+
+    return render(request, "financial_feedback.html", context={"feedback_form": form, "project": project})
+
+
+@login_required
+def adm_action(request, project_id: int):
+    """Allows the ADM to approve or reject a project"""
+
+    project = get_object_or_404(Project, id=project_id)
+    action = request.GET.get("approve", None)
+
+    if action is None:
+        messages.error(request, "Invalid action.")
+        # Redirect to the previous page or to the employee's home page
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", reverse("employee_home")))
+
+    if action == "1":
+        # Approve the project, push it to the next step.
+        project.status = "admin_approved"
+        project.save()
+        messages.success(request, "Project approved !")
+    else:
+        # Reject the project
+        project.status = "admin_rejected"
+        project.save()
+        messages.success(request, "Project rejected !")
+
+    return HttpResponseRedirect(reverse("employee_home"))

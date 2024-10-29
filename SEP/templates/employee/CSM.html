@@ -13,7 +13,7 @@
             </tr>
             {% for project in waiting_approval %}
                 <tr>
-                    <td>{{ project.name }}</td>
+                    <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
                     <td>
                         <a href="{% url 'project:project_detail' project.id %}">
@@ -47,11 +47,11 @@
                 <th>Client</th>
                 <th>Status</th>
             </tr>
-            {% for project in projects %}
+            {% for project in project_history %}
                 <tr>
                     <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
-                    <td>
+                    <td class="status-{{ project.status }}">
                         {{ project.get_status_display }}
                     </td>
                 </tr>

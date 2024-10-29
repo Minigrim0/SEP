@@ -122,8 +122,12 @@ table, th, td {
     border: 1px solid;
 }
 
-th {
+.employee-column th {
     width: 30%;
+}
+
+td {
+    padding: 5px;
 }
 
 .btn-approve {
@@ -173,6 +177,10 @@ orange/yellow : #F3B562
 red : #F06060
 
 */
+
+.status-draft {
+    background-color: #F2EBBF;  /* whiteish */
+}
 
 .status-pending {
     background-color: #5C4B51;  /* grayish */

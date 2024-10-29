@@ -35,6 +35,9 @@
                     {% csrf_token %}
                     <button type="submit">Logout</button>
                 </form>
+                <a href="{% url 'project:project_list' %}">
+                    <button>project list</button>
+                </a>
             </td>
         </tr>
     </table>

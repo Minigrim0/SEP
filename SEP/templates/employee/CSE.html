@@ -51,7 +51,7 @@
                 <tr>
                     <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
-                    <td>
+                    <td class="status-{{ project.status }}">
                         {{ project.get_status_display }}
                     </td>
                 </tr>

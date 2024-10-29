@@ -1,0 +1,48 @@
+{% extends "employee.html" %}
+
+{% block page_title %}
+Project list
+{% endblock %}
+
+{% block return_link %}
+    <a href="{% url 'employee_home' %}">Employee Homepage</a>
+{% endblock %}
+
+{% block employee_dashboard %}
+    <div class="content-50 mt-2">
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="h-centered">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Budget</th>
+                    <th>Client</th>
+                    <th>Actions</th>
+                    <th>Date</th>
+                </tr>
+                {% for project in projects %}
+                    <tr>
+                        <td>{{ project.id }}</td>
+                        <td>{{ project.title }}</td>
+                        <td class="status-{{ project.status }}">{{ project.get_status_display }}</td>
+                        <td>{{ project.estimated_budget }}€</td>
+                        <td>{{ project.client.name }}</td>
+                        <td>
+                            <a href="{% url 'project:project_detail' project.id %}">View</a>
+                        </td>
+                        <td>{{ project.created_at|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

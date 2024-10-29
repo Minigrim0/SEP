@@ -1,8 +1,15 @@
 {% extends "employee.html" %}
 
+{% block page_title %}
+Project #{{ project.id }}
+{% endblock %}
+
+{% block return_link %}
+    <a href="{% url 'employee_home' %}">Employee Homepage</a>
+{% endblock %}
+
 {% block employee_dashboard %}
     <div class="content-50 mt-2">
-        <h2 class="text-center">Project #{{ project.id }}</h2>
 
         {% if messages %}
             {% for message in messages %}

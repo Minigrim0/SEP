@@ -4,9 +4,11 @@
 
 {% block content %}
     <small class="employee-button">
-        <a href="{% url 'home' %}">Return to the homepage</a>
+        {% block return_link %}
+            <a href="{% url 'home' %}">Index</a>
+        {% endblock %}
     </small>
-    <h1 class="text-center">Welcome to the Employee page!</h1>
+    <h1 class="text-center">{% block page_title %}Welcome to the Employee page!{% endblock %}</h1>
 
     {% if messages %}
         {% for message in messages %}

@@ -43,7 +43,7 @@ def employee_home(request):
         return render(request, "employee/CSM.html", context=context)
     elif request.user.role.id == "FIM":
         context["waiting_feedback"] = Project.objects.filter(status="cs_approved")
-        context["project_history"] = Project.objects.filter(Q(status="admin_approved") | Q(status="admin_rejected")).order_by("-created_at")[:25]
+        context["project_history"] = Project.objects.filter(Q(status="admin_approved") | Q(status="admin_rejected") | Q(status="fin_review")).order_by("-created_at")[:25]
 
         return render(request, "employee/FIM.html", context=context)
     elif request.user.role.id == "ADM":
