@@ -40,14 +40,14 @@
         <small>Tranform these requests into fully fledged projects.</small>
     </div>
     <div class="employee-column">
-        <h3>Filled projects</h3>
+        <h3>Project history</h3>
         <table class="project-table">
             <tr>
                 <th>Title</th>
                 <th>Client</th>
                 <th>Status</th>
             </tr>
-            {% for project in projects %}
+            {% for project in project_history %}
                 <tr>
                     <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>

@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from project.models import RawRequest
+from project.models import RawRequest, Project
 from project.forms import ProjectInitialForm
 
 from SEP.models import Customer
@@ -66,3 +66,14 @@ def create_project_from_raw(request, id: int):
     }
 
     return render(request, "raw_request.html", context=context)
+
+
+@login_required
+def project_detail(request, project_id: int):
+    project = get_object_or_404(Project, id=project_id)
+
+    context = {
+        "project": project,
+    }
+
+    return render(request, "project_detail.html", context=context)

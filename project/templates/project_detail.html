@@ -1,0 +1,48 @@
+{% extends "employee.html" %}
+
+{% block employee_dashboard %}
+    <div class="content-50 mt-2">
+        <h2 class="text-center">Project #{{ project.id }}</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="h-centered">
+            <table>
+                <tr>
+                    <td>Client</td>
+                    <td>{{ project.client.name }} - {{ project.client.email }}</td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>{{ project.title }}</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td class="status-{{ project.status }}">{{ project.get_status_display }}</td>
+                </tr>
+                <tr>
+                    <td>Budget</td>
+                    <td>{{ project.estimated_budget }}€</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>{{ project.description }}</td>
+                </tr>
+                <tr>
+                    <td>Financial feedback</td>
+                    {% if project.financial_feedback %}
+                        <td>{{ project.financial_feedback }}</td>
+                    {% else %}
+                        <td class="error">No feedback yet</td>
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,7 @@
 
 <div class="content-row-3">
     <div class="employee-column">
-        <h3>New projects</h3>
+        <h3>Waiting for approval</h3>
         <table class="raw-request-table">
             <tr>
                 <th>Client</th>
@@ -16,15 +16,14 @@
                     <td>{{ project.name }}</td>
                     <td>{{ project.title }}</td>
                     <td>
-                        <a href="{% url 'project:project_detail' project.id %}">
+                        <a href="{% url 'project:details' project.id %}">
                             <button class="centered">Details</button>
                         </a>
 
-                        <a href="{% url 'project:csm_action' project.id %}?approve=1">
+                        <a href="">
                             <button class="centered">Approve</button>
                         </a>
-
-                        <a href="{% url 'project:csm_action' project.id %}?approve=0">
+                        <a href="">
                             <button class="centered">Reject</button>
                         </a>
                     </td>
@@ -37,7 +36,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <small>Approve or disapprove of these projects.</small>
+        <small>These projects require feedback.</small>
     </div>
     <div class="employee-column">
         <h3>Projects History</h3>
@@ -47,7 +46,7 @@
                 <th>Client</th>
                 <th>Status</th>
             </tr>
-            {% for project in projects %}
+            {% for project in project_history %}
                 <tr>
                     <td>{{ project.client.name }}</td>
                     <td>{{ project.title }}</td>
@@ -63,7 +62,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <small>This is an historic of the last projects you approved or denied</small>
+        <small>This is an historic of the last projects reviewed</small>
     </div>
     {% include "employee/profile.html" %}
 </div>

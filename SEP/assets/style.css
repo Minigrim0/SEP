@@ -13,6 +13,11 @@ body h1 {
     text-align: center;
 }
 
+.h-centered {
+    display: flex;
+    justify-content: center;
+}
+
 .centered {
     width: 100%;
     height: 100%;
@@ -154,4 +159,37 @@ th {
 .form-action-buttons {
     display: flex;
     justify-content: end;
+}
+
+/*
+
+palette :
+https://colordesigner.io/color-palette-builder#5C4B51-8CBEB2-F2EBBF-F3B562-F06060
+
+grayish : #5C4B51
+whiteish: #F2EBBF
+green/blue : #8CBEB2
+orange/yellow : #F3B562
+red : #F06060
+
+*/
+
+.status-pending {
+    background-color: #5C4B51;  /* grayish */
+}
+
+.status-cs_rejected, .status-admin_rejected {
+    background-color: #F06060;  /* red */
+}
+
+.status-fin_review {
+    background-color: #F3B562;  /* orange/yellow */
+}
+
+.status-cs_approved {
+    background-color: #F2EBBF;  /* whiteish */
+}
+
+.status-admin_approved {
+    background-color: #8CBEB2;  /* green/blue */
 }

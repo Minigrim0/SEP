@@ -49,6 +49,8 @@ class Project(models.Model):
     status = models.CharField(verbose_name="project status", max_length=20, choices=STATUS_CHOICES, default="draft", blank=True, null=True)
 
     financial_feedback = models.TextField(verbose_name="feedback from financial dpt.", blank=True, null=True)
+    # Publish status of the financial feedback by default
+    financial_feedback_draft_status = models.BooleanField(verbose_name="Draft status of the financial feedback", default=False)
 
     meeting = models.OneToOneField("project.Meeting", verbose_name="Initial client meeting", on_delete=models.CASCADE, blank=True, null=True)
 
