@@ -21,7 +21,9 @@ class ProjectInitialForm(forms.ModelForm):
             "initial_request",
             "status",
             "financial_feedback",
-            "meeting"
+            "financial_feedback_draft_status",
+            "created_by",
+            "meeting",
         )
 
 
