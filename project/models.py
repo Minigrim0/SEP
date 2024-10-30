@@ -46,6 +46,10 @@ class Project(models.Model):
     description = models.TextField(verbose_name="Project Description", blank=True, null=True)
     estimated_budget = models.IntegerField(verbose_name="Initial budget estimation", validators=[validators.MinValueValidator(0)], blank=True, null=True)
 
+    from_date = models.DateField(verbose_name="Event start date", blank=True, null=True)
+    to_date = models.DateField(verbose_name="Event end date", blank=True, null=True)
+    expected_number_of_guests = models.IntegerField(verbose_name="Expected number of guests", validators=[validators.MinValueValidator(0)], blank=True, null=True)
+
     # Information on the project status
     status = models.CharField(verbose_name="project status", max_length=20, choices=STATUS_CHOICES, default="draft", blank=True, null=True)
 

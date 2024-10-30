@@ -26,6 +26,12 @@ class ProjectInitialForm(forms.ModelForm):
             "created_by",
             "meeting",
         )
+        widgets = {
+            "estimated_budget": forms.NumberInput(attrs={"min": 0}),
+            "expected_number_of_guests": forms.NumberInput(attrs={"min": 0}),
+            "from_date": forms.DateInput(attrs={"type": "date"}),
+            "to_date": forms.DateInput(attrs={"type": "date"}),
+        }
 
 
 class FinancialFeedbackForm(forms.Form):
