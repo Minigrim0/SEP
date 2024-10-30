@@ -1,0 +1,37 @@
+{% extends "employee.html" %}
+
+{% block employee_dashboard %}
+
+<div class="content-row-2">
+    <div class="employee-column">
+        <h3>Currently active projects</h3>
+        <table class="raw-request-table">
+            <tr>
+                <th>Client</th>
+                <th>Request</th>
+                <th>Actions</th>
+            </tr>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.client.name }}</td>
+                    <td>{{ project.title }}</td>
+                    <td>
+                        <a href="{% url 'project:psdm_action' project.id %}">
+                            <button class="centered">see more</button>
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        No current project !
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <small>These projects are currently ongoing, you can assign tasks to employees.</small>
+    </div>
+    {% include "employee/profile.html" %}
+</div>
+
+{% endblock %}

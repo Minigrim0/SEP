@@ -5,9 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from project.models import RawRequest, Project
-from project.forms import ProjectInitialForm, FinancialFeedbackForm
+from project.forms import ProjectInitialForm, FinancialFeedbackForm, TaskAssignmentForm
 
-from SEP.models import Customer
+from SEP.models import Customer, Team
 
 
 @login_required
@@ -168,3 +168,46 @@ def adm_action(request, project_id: int):
         messages.success(request, "Project rejected !")
 
     return HttpResponseRedirect(reverse("employee_home"))
+
+
+@login_required
+def psdm_action(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    context = {}
+    context["project"] = project
+    context["teams"] = Team.objects.filter(manager=request.user)
+    context["dept"] = "Services" if request.user.role.id == "SDM" else "Production"
+
+    return render(request, "psdm_project_view.html", context=context)
+
+
+@login_required
+def psdm_team_action(request, project_id, team_id):
+    project = get_object_or_404(Project, id=project_id)
+    team = get_object_or_404(Team, id=team_id)
+
+    if request.method == "POST":
+        form = TaskAssignmentForm(request.POST, team=team)
+
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.sender = request.user
+            task.project = project
+            task.save()
+
+            messages.success(request, "Task assigned successfully.")
+            return HttpResponseRedirect(reverse("project:psdm_action", args=[project_id]))
+        else:
+            messages.error(request, "Please correct the error(s) below.")
+
+    else:
+        form = TaskAssignmentForm(team=team)
+
+    context = {
+        "project": project,
+        "team": team,
+        "form": form,
+    }
+
+    return render(request, "psdm_task_create.html", context=context)

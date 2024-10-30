@@ -1,0 +1,46 @@
+{% extends "employee.html" %}
+
+{% block page_title %}
+Project #{{ project.id }} - New task for team {{ team.name }}
+{% endblock %}
+
+{% block return_link %}
+    <a href="{% url 'employee_home' %}">Employee Homepage</a>
+{% endblock %}
+
+{% block employee_dashboard %}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="content-50 mt-2">
+        <div class="form">
+            <h3 class="text-center form-title">Task creation</h3>
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for error in form.non_field_errors %}
+                    <small class="error">{{ error }}</small>
+                {% endfor %}
+
+                {% for field in form %}
+                    {% for error in field.errors.all %}
+                        <small class="error">{{ error }}</small>
+                    {% endfor %}
+                    <div class="input-field">
+                        {{ field.label_tag }} <br />
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+                <div class="submit-button-wrapper">
+                    <button type="submit" class="submit-button">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

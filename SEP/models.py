@@ -10,6 +10,25 @@ class Customer(models.Model):
     def __str__(self) -> str:
         return self.name
 
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField("SEP.Employee", through="SEP.TeamToEmployee")
+    manager = models.ForeignKey("SEP.Employee", on_delete=models.CASCADE, related_name="managed_teams")
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class TeamToEmployee(models.Model):
+    team = models.ForeignKey("SEP.Team", on_delete=models.CASCADE)
+    employee = models.ForeignKey("SEP.Employee", on_delete=models.CASCADE)
+
+    # Is this employee the chief of the team?
+    is_chief = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f"{self.team} - {self.employee}"
+
 
 class Role(models.Model):
     name = models.CharField(max_length=100)

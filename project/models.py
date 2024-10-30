@@ -34,6 +34,7 @@ class Project(models.Model):
         ("fin_review", "REVIEWED BY THE FINANCIAL MANAGER"),  # The financial manager reviewed the project and wrote some feedback
         ("admin_approved", "APPROVED BY THE ADMINISTRATION MANAGER"),  # The admin manager approved the project
         ("admin_rejected", "REJECTED BY THE ADMINISTRATION MANAGER"),  # The admin manager rejected the project
+        ("completed", "COMPLETED"),  # The project is done, no more work on it
     ]
 
     # Information on the client
@@ -60,3 +61,16 @@ class Project(models.Model):
 
     def __str__(self) -> str:
         return f"{self.status} - {self.title}"
+
+
+class Task(models.Model):
+    project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
+    assignee = models.ForeignKey("SEP.Employee", on_delete=models.CASCADE, related_name="tasks")
+
+    subject = models.CharField(max_length=100)
+    # LOW, MEDIUM, HIGH, CRITICAL
+    priority = models.IntegerField(default=0, validators=[validators.MinValueValidator(0), validators.MaxValueValidator(3)])
+    description = models.TextField()
+    due_date = models.DateField()
+
+    sender = models.ForeignKey("SEP.Employee", on_delete=models.SET_NULL, null=True, blank=True, related_name="task_sent")

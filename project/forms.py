@@ -1,6 +1,7 @@
 from django import forms
 
-from project.models import RawRequest, Project
+from project.models import RawRequest, Project, Task
+from SEP.models import Employee
 
 
 class RawRequestForm(forms.ModelForm):
@@ -31,3 +32,23 @@ class FinancialFeedbackForm(forms.Form):
     """Form for the financial manager to write feedback on a project"""
 
     feedback = forms.CharField(widget=forms.Textarea)
+
+
+class TaskAssignmentForm(forms.ModelForm):
+    """Form for the project manager to assign tasks to a team."""
+
+    class Meta:
+        model = Task
+        fields = ("assignee", "subject", "priority", "due_date", "description", "due_date")
+        widgets = {
+            "due_date": forms.DateInput(attrs={"type": "date"}),
+            "project": forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+       	# Extract the user from the view
+        team = kwargs.pop('team')
+        super().__init__(*args, **kwargs)
+        # Filter authors related to the logged-in user
+
+        self.fields['assignee'].queryset = team.members.all()

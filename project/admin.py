@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from project.models import Project, RawRequest, Meeting
+from project.models import Project, RawRequest, Meeting, Task
 
 
 @admin.register(Project)
@@ -19,3 +19,7 @@ class RawRequestAdmin(admin.ModelAdmin):
 class MeetingAdmin(admin.ModelAdmin):
     list_display = ("date", "time")
     search_fields = ("date", "time")
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ("subject", "priority", "assignee", "sender")

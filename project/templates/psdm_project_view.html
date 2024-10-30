@@ -1,0 +1,62 @@
+{% extends "employee.html" %}
+
+{% block page_title %}
+Project #{{ project.id }}
+{% endblock %}
+
+{% block return_link %}
+    <a href="{% url 'employee_home' %}">Employee Homepage</a>
+{% endblock %}
+
+{% block employee_dashboard %}
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="content-row-2 mt-2">
+        <div class="h-centered">
+            <table>
+                <tr>
+                    <td>Client</td>
+                    <td>{{ project.client.name }} - {{ project.client.email }}</td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>{{ project.title }}</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td class="status-{{ project.status }}">{{ project.get_status_display }}</td>
+                </tr>
+                <tr>
+                    <td>Budget</td>
+                    <td>{{ project.estimated_budget }}€</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>{{ project.description }}</td>
+                </tr>
+                <tr>
+                    <td>Financial feedback</td>
+                    {% if project.financial_feedback %}
+                        <td>{{ project.financial_feedback }}</td>
+                    {% else %}
+                        <td class="error">No feedback yet</td>
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+        <div class="task-form">
+            <h3>{{ dept }} Tasks</h3>
+            {% for team in teams %}
+                <a href="{% url 'project:psdm_team_action' project.id team.id %}">
+                    <button>New {{ team.name }} task</button>
+                </a><br />
+            {% endfor %}
+            <small>Here you can assign new tasks to employees</small>
+        </div>
+    </div>
+{% endblock %}

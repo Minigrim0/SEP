@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-
 from project.forms import RawRequestForm
 from project.models import RawRequest, Project
 
@@ -51,5 +50,9 @@ def employee_home(request):
         context["project_history"] = Project.objects.filter(Q(status="admin_approved") | Q(status="admin_rejected")).order_by("-created_at")[:25]
 
         return render(request, "employee/ADM.html", context=context)
+    elif request.user.role.id == "PDM" or request.user.role.id == "SDM":
+        context["projects"] = Project.objects.filter(status="admin_approved").order_by("-created_at")[:25]
+
+        return render(request, "employee/PSDM.html", context=context)
 
     # TODO add conditions for other employee types

@@ -10,4 +10,6 @@ urlpatterns = [
     path('<int:project_id>/csm-action', views.csm_action, name="csm_action"),               # View for the CSM to approve/reject a project
     path('<int:project_id>/fin-action', views.fin_action, name="fin_action"),               # View for the Finance Manager to write feedback on the project
     path('<int:project_id>/adm-action', views.adm_action, name="adm_action"),  # View for the Admin to approve/reject a project
+    path('<int:project_id>/psdm-action', views.psdm_action, name="psdm_action"),  # View for the P/SDM to navigate to tasks assignment per team
+    path('<int:project_id>/psdm-action/<int:team_id>/', views.psdm_team_action, name="psdm_team_action"),  # View for the P/SDM to assign tasks to a team's members
 ]
