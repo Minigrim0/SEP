@@ -92,6 +92,11 @@ body h1 {
     padding: 1rem;
     font-size: 1rem;
 }
+.content-row-4 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 1rem;
+}
 
 .content-row-3 {
     display: grid;

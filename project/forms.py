@@ -1,6 +1,6 @@
 from django import forms
 
-from project.models import RawRequest, Project, Task
+from project.models import RawRequest, Project, Task, RecruitementPost, FinancialRequest
 from SEP.models import Employee
 
 
@@ -58,3 +58,28 @@ class TaskAssignmentForm(forms.ModelForm):
         # Filter authors related to the logged-in user
 
         self.fields['assignee'].queryset = team.members.all()
+
+
+class RecruitmentRequestForm(forms.ModelForm):
+    """Form for the P/SDM to request a new employee to the HR department."""
+
+    class Meta:
+        model = RecruitementPost
+        widgets = {
+            "min_years_experience": forms.NumberInput(attrs={"min": 0}),
+            "contract_type": forms.RadioSelect(),
+            "department": forms.RadioSelect(),
+        }
+        fields = ("contract_type", "department", "min_years_experience", "title", "description",)
+
+
+class FinancialRequestForm(forms.ModelForm):
+    """Form for the P/SDM to request more money from the financial department."""
+
+    class Meta:
+        model = FinancialRequest
+        widgets = {
+            "requesting_department": forms.RadioSelect(),
+            "reason": forms.Textarea(attrs={"rows": 3}),
+        }
+        fields = ("requesting_department", "amount", "reason",)

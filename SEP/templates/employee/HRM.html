@@ -1,0 +1,77 @@
+{% extends "employee.html" %}
+
+{% block employee_dashboard %}
+
+<div class="content-row-3">
+    <div class="employee-column">
+        <h3>Waiting for feedback</h3>
+        <table class="raw-request-table">
+            <tr>
+                <th>Department</th>
+                <th>Job title</th>
+                <th>Contract type</th>
+                <th>Experience requirements</th>
+                <th>Actions</th>
+            </tr>
+            {% for recr in pending_campaigns %}
+                <tr>
+                    <td>{{ recr.get_department_display }}</td>
+                    <td>{{ recr.title }}</td>
+                    <td>{{ recr.contract_type }}</td>
+                    <td>{{ recr.min_years_experience }} year(s)</td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="recruitment_request_id" value="{{ recr.id }}">
+                            <button type="submit" name="start_campaign" class="centered">Start the campaign</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No pending recruitment requests
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <small>Recruitment requests for different departments.</small>
+    </div>
+    <div class="employee-column">
+        <h3>Ongoing campaigns</h3>
+        <table class="project-table">
+            <tr>
+                <th>Department</th>
+                <th>Job title</th>
+                <th>Contract type</th>
+                <th>Experience requirements</th>
+                <th>Actions</th>
+            </tr>
+            {% for recr in ongoing_campaigns %}
+                <tr>
+                    <td>{{ recr.get_department_display }}</td>
+                    <td>{{ recr.title }}</td>
+                    <td>{{ recr.contract_type }}</td>
+                    <td>{{ recr.min_years_experience }} year(s)</td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="recruitment_request_id" value="{{ recr.id }}">
+                            <button type="submit" name="complete_campaign" class="centered">Complete the campaign</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No ongoing campaign
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <small>This is the list of the ongoing campaigns, meet with candidates, conduct interviews and recruit new employees</small>
+    </div>
+    {% include "employee/profile.html" %}
+</div>
+
+{% endblock %}

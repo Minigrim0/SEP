@@ -79,3 +79,53 @@ class Task(models.Model):
     due_date = models.DateField()
 
     sender = models.ForeignKey("SEP.Employee", on_delete=models.SET_NULL, null=True, blank=True, related_name="task_sent")
+
+
+class RecruitementPost(models.Model):
+    STATUS_CHOICES = [
+        ("pending", "Pending approval of HR"),
+        ("ongoing", "Ongoing recruitment"),
+        ("completed", "Recruitment completed"),
+    ]
+
+    CONTRACT_TYPE_CHOICES = [
+        ("part", "Part-time"),
+        ("full", "Full-time"),
+    ]
+
+    DEPARTEMENT_CHOICES = [
+        ("adm", "Administration"),
+        ("serv", "Services"),
+        ("prod", "Production"),
+        ("fina", "Financial")
+    ]
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    contract_type = models.CharField(max_length=4, choices=CONTRACT_TYPE_CHOICES)
+    department = models.CharField(max_length=4, choices=DEPARTEMENT_CHOICES)
+
+    min_years_experience = models.IntegerField(validators=[validators.MinValueValidator(0)])
+
+    title = models.CharField(verbose_name="Job title", max_length=100)
+    description = models.TextField(verbose_name="Job description")
+
+
+class FinancialRequest(models.Model):
+    STATUS_CHOICES = [
+        ("pending", "Pending approval of the financial manager"),
+        ("approved", "Approved by the financial manager"),
+        ("rejected", "Rejected by the financial manager"),
+    ]
+
+    DEPARTEMENT_CHOICES = [
+        ("adm", "Administration"),
+        ("serv", "Services"),
+        ("prod", "Production"),
+        ("fina", "Financial")
+    ]
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    requesting_department = models.CharField(max_length=4, choices=DEPARTEMENT_CHOICES)
+    amount = models.IntegerField(validators=[validators.MinValueValidator(0)])
+    project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
+    reason = models.TextField(verbose_name="Reason for the request")

@@ -17,6 +17,7 @@ class Command(BaseCommand):
             ("PDM", "Production Dpt Manager"),
             ("SDE", "Service Dpt Employee"),
             ("SDM", "Service Dpt Manager"),
+            ("HRM", "HR Manager"),
         ]:
             _, created = Role.objects.get_or_create(id=role_id, name=role_name)
             if created:
@@ -101,6 +102,17 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("SDM Employee Sara Du Mer created."))
         else:
             self.stdout.write(self.style.WARNING("SDM Employee Sara Du Mer already exists."))
+
+        if Employee.objects.get_or_create(
+            username="hrm1",
+            first_name="Henri",
+            last_name="Rodrigue-Marsouin",
+            email="hrm1@sep.se",
+            role=Role.objects.get(id="HRM"),
+        )[1]:
+            self.stdout.write(self.style.SUCCESS("HRM Employee Henri Rodrigue-Marsouin created."))
+        else:
+            self.stdout.write(self.style.WARNING("HRM Employee Henri Rodrigue-Marsouin already exists."))
 
         # Producttion teams under the production manager
         for team in [

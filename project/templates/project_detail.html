@@ -10,15 +10,6 @@ Project #{{ project.id }}
 
 {% block employee_dashboard %}
     <div class="content-50 mt-2">
-
-        {% if messages %}
-            {% for message in messages %}
-                <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
-                    <p>{{ message }}</p>
-                </div>
-            {% endfor %}
-        {% endif %}
-
         <div class="h-centered">
             <table>
                 <tr>

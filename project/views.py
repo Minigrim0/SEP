@@ -1,12 +1,12 @@
 from django.core.handlers.asgi import HttpResponseBadRequest
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from project.models import RawRequest, Project, Task
-from project.forms import ProjectInitialForm, FinancialFeedbackForm, TaskAssignmentForm
+from project.forms import ProjectInitialForm, FinancialFeedbackForm, TaskAssignmentForm, RecruitmentRequestForm, FinancialRequestForm
 
 from SEP.models import Customer, Team
 
@@ -223,3 +223,41 @@ def task_detail(request, project_id: int, task_id: int):
         return HttpResponseBadRequest("Invalid tak & project id combination")
 
     return render(request, "task_detail.html", context={"task": task})
+
+
+@login_required
+def recruitement_request(request):
+    if request.method == "POST":
+        form = RecruitmentRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Recruitment request submitted successfully.")
+            return HttpResponseRedirect(reverse("home"))
+        else:
+            messages.error(request, "Please correct the error(s) below.")
+
+    else:
+        form = RecruitmentRequestForm()
+
+    return render(request, "recruitment_request.html", context={"form": form})
+
+
+@login_required
+def financial_request(request, project_id: int):
+    project = get_object_or_404(Project, id=project_id)
+
+    if request.method == "POST":
+        form = FinancialRequestForm(request.POST)
+        if form.is_valid():
+            frequest = form.save(commit=False)
+            frequest.project = project
+            frequest.save()
+            messages.success(request, "Recruitment request submitted successfully.")
+            return HttpResponseRedirect(reverse("project:psdm_action", args=[project_id]))
+        else:
+            messages.error(request, "Please correct the error(s) below.")
+
+    else:
+        form = FinancialRequestForm()
+
+    return render(request, "financial_request.html", context={"form": form})

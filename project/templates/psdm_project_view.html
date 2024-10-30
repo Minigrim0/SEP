@@ -9,13 +9,6 @@ Project #{{ project.id }}
 {% endblock %}
 
 {% block employee_dashboard %}
-    {% if messages %}
-        {% for message in messages %}
-            <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
-                <p>{{ message }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
     <div class="content-row-2 mt-2">
         <div class="h-centered">
             <table>
@@ -57,6 +50,15 @@ Project #{{ project.id }}
                 </a><br />
             {% endfor %}
             <small>Here you can assign new tasks to employees</small>
+            <h3>{{ dept }} actions</h3>
+            <a href="{% url 'project:recruitement_request' %}">
+                <button>Request more personel</button>
+            </a>
+            <small>Fill a form to the HR dept for recruitment</small><br/>
+            <a href="{% url 'project:financial_request' project.id %}">
+                <button>Request more finances</button>
+            </a>
+            <small>Fill a form to the Financial dept for an extended funding</small>
         </div>
     </div>
 {% endblock %}
