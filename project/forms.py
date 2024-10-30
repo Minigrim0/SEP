@@ -45,7 +45,7 @@ class TaskAssignmentForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ("assignee", "subject", "priority", "due_date", "description", "due_date")
+        fields = ("assignee", "subject", "priority", "due_date", "description", )
         widgets = {
             "due_date": forms.DateInput(attrs={"type": "date"}),
             "project": forms.HiddenInput(),

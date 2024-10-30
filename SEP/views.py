@@ -72,8 +72,9 @@ def employee_home(request):
         context["projects"] = Project.objects.filter(status="admin_approved").order_by("-created_at")[:25]
 
         return render(request, "employee/PSDM.html", context=context)
-    elif request.user.role.id == "PDE":
-        context["tasks"] = Task.objects.filter(completed=False).order_by("due_date")[:25]
+
+    elif request.user.role.id == "PDE" or request.user.role.id == "SDE":
+        context["tasks"] = Task.objects.filter(completed=False, assignee=request.user).order_by("due_date")[:25]
         context["projects"] = Project.objects.filter(status="admin_approved").order_by("-created_at")[:25]
 
         return render(request, "employee/PSDE.html", context=context)
