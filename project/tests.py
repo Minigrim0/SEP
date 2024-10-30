@@ -3,7 +3,7 @@ import logging
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 from SEP.models import Role, Employee, Customer
-from SEP.test_utils import create_project
+from SEP.test_utils import create_project, create_people
 from project.models import RawRequest, Project
 
 logger = logging.getLogger(__name__)
@@ -14,75 +14,7 @@ class ProjectTestCase(TestCase):
         """Create initial data to work from"""
 
         self.client = Client()
-
-        for role_id, role_name in [
-            ("CSE", "Customer Service Employee"),
-            ("CSM", "Customer Service Manager"),
-            ("FIM", "Financial Manager"),
-            ("ADM", "Administration Dpt Manager")
-        ]:
-            _, created = Role.objects.get_or_create(id=role_id, name=role_name)
-            if created:
-                logger.info(f"Role {role_name} created.")
-            else:
-                logger.warn(f"Role {role_name} already exists.")
-
-        # Create initial employees
-        if Employee.objects.get_or_create(
-            username="cse1",
-            first_name="Carmen",
-            last_name="Santa-Emeritus",
-            email="cse1@sep.se",
-            role=Role.objects.get(id="CSE"),
-        )[1]:
-            logger.info("CSE Employee Carmen Santa-Emeritus created.")
-        else:
-            logger.warn("CSE Employee Carmen Santa-Emeritus already exists.")
-
-        if Employee.objects.get_or_create(
-            username="cse2",
-            first_name="Cedric",
-            last_name="Saladin-Ernandez",
-            email="cse2@sep.se",
-            role=Role.objects.get(id="CSE"),
-        ):
-            logger.info("CSE Employee Cedric Saladin-Ernandez created.")
-        else:
-            logger.warn("CSE Employee Cedric Saladin-Ernandez already exists.")
-
-        if Employee.objects.get_or_create(
-            username="csm1",
-            first_name="Carlos",
-            last_name="Sitaro-Meritus",
-            email="csm1@sep.se",
-            role=Role.objects.get(id="CSM"),
-        ):
-            logger.info("CSM Employee Carlos Sitaro-Meritus created.")
-        else:
-            logger.warn("CSM Employee Carlos Sitaro-Meritus already exists.")
-
-        if Employee.objects.get_or_create(
-            username="fim1",
-            first_name="Fernando",
-            last_name="Iniesta-Malan",
-            email="fim1@sep.se",
-            role=Role.objects.get(id="FIM"),
-        ):
-            logger.info("FIM Employee Fernando Iniesta-Malan created.")
-        else:
-            logger.warn("FIM Employee Fernando Iniesta-Malan already exists.")
-
-        if Employee.objects.get_or_create(
-            username="adm1",
-            first_name="Amanda",
-            last_name="Dministrador",  # Thanks copilot
-            email="adm1@sep.se",
-            role=Role.objects.get(id="ADM"),
-        ):
-            logger.info("ADM Employee Amanda Dministrador created.")
-        else:
-            logger.warn("ADM Employee Amanda Dministrador already exists.")
-
+        create_people()
 
     def test_create_project_from_raw(self):
         """Tests that the form to create a project from a raw request works correctly."""
@@ -214,3 +146,12 @@ class ProjectTestCase(TestCase):
 
         self.assertEqual(302, response.status_code)
         self.assertEqual("admin_rejected", Project.objects.get(id=project.id).status)
+
+
+class TaskDispatchingTestCase(TestCase):
+    """Tests the task dispatching functionality."""
+
+    def setUp(self):
+        """Creates the necessary employees and customers for the tests."""
+
+        create_people()
