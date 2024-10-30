@@ -14,6 +14,9 @@ class RawRequest(models.Model):
     description = models.TextField()
     available = models.IntegerField(verbose_name="Available budget", validators=[validators.MinValueValidator(0)])
 
+    def __str__(self) -> str:
+            return f"Raw Request ({self.name} - {self.title}"
+
 
 class Meeting(models.Model):
     date = models.DateField(verbose_name="Meeting date")
@@ -80,6 +83,9 @@ class Task(models.Model):
 
     sender = models.ForeignKey("SEP.Employee", on_delete=models.SET_NULL, null=True, blank=True, related_name="task_sent")
 
+    def __str__(self) -> str:
+        return f"Task {self.subject} - {self.project}"
+
 
 class RecruitementPost(models.Model):
     STATUS_CHOICES = [
@@ -109,6 +115,9 @@ class RecruitementPost(models.Model):
     title = models.CharField(verbose_name="Job title", max_length=100)
     description = models.TextField(verbose_name="Job description")
 
+    def __str__(self) -> str:
+        return f"Recruitment Post {self.title} - {self.department}"
+
 
 class FinancialRequest(models.Model):
     STATUS_CHOICES = [
@@ -129,3 +138,6 @@ class FinancialRequest(models.Model):
     amount = models.IntegerField(validators=[validators.MinValueValidator(0)])
     project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
     reason = models.TextField(verbose_name="Reason for the request")
+
+    def __str__(self) -> str:
+        return f"Financial Request {self.amount} - {self.requesting_department}"

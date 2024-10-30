@@ -8,7 +8,8 @@ class Customer(models.Model):
     address = models.TextField()
 
     def __str__(self) -> str:
-        return self.name
+        return f"Customer {self.name}"
+
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -16,7 +17,7 @@ class Team(models.Model):
     manager = models.ForeignKey("SEP.Employee", on_delete=models.CASCADE, related_name="managed_teams")
 
     def __str__(self) -> str:
-        return self.name
+        return f"Team {self.name}"
 
 
 class TeamToEmployee(models.Model):
@@ -35,7 +36,7 @@ class Role(models.Model):
     id = models.CharField(max_length=3, primary_key=True)
 
     def __str__(self) -> str:
-        return self.name
+        return f"Role {self.name}"
 
 
 class Employee(AbstractUser):
@@ -53,7 +54,4 @@ class Employee(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return f"{self.last_name} - {self.first_name} - {self.role.name}"
-
-    def amount_of_projects(self) -> int:
-        return self.project_set.count()
+        return f"Employee {self.last_name} {self.first_name} - {self.role.name}"
