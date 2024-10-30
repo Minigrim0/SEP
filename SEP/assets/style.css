@@ -201,3 +201,15 @@ red : #F06060
 .status-admin_approved {
     background-color: #8CBEB2;  /* green/blue */
 }
+
+.prio-1 {
+    background-color: #8CBEB2;
+}
+
+.prio-2 {
+    background-color: #F3B562;
+}
+
+.prio-3 {
+    background-color: #F06060;
+}

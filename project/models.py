@@ -66,6 +66,7 @@ class Project(models.Model):
 class Task(models.Model):
     project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
     assignee = models.ForeignKey("SEP.Employee", on_delete=models.CASCADE, related_name="tasks")
+    completed = models.BooleanField(default=False)
 
     subject = models.CharField(max_length=100)
     # LOW, MEDIUM, HIGH, CRITICAL

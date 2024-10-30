@@ -1,0 +1,47 @@
+{% extends "employee.html" %}
+
+{% block page_title %}
+Task #{{ task.id }}
+{% endblock %}
+
+{% block return_link %}
+    <a href="{% url 'employee_home' %}">Employee Homepage</a>
+{% endblock %}
+
+{% block employee_dashboard %}
+    <div class="content-50 mt-2">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="message-{{ message.tags }}"{% endif %}>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="h-centered">
+            <table>
+                <tr>
+                    <td>Subject</td>
+                    <td>{{ task.subject }}</td>
+                </tr>
+                <tr class="prio-{{ task.priority }}">
+                    <td>priority</td>
+                    <td>{{ task.priority }}</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>{{ task.description }}</td>
+                </tr>
+                <tr>
+                    <td>due_date</td>
+                    <td>{{ task.due_date|date:"d/m/Y" }}€</td>
+                </tr>
+                <tr>
+                    <td>sender</td>
+                    <td>{{ task.sender.first_name }} {{ task.sender.last_name }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

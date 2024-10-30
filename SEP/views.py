@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from project.forms import RawRequestForm
-from project.models import RawRequest, Project
+from project.models import RawRequest, Project, Task
 
 
 def home(request):
@@ -54,5 +54,10 @@ def employee_home(request):
         context["projects"] = Project.objects.filter(status="admin_approved").order_by("-created_at")[:25]
 
         return render(request, "employee/PSDM.html", context=context)
+    elif request.user.role.id == "PDE":
+        context["tasks"] = Task.objects.filter(completed=False).order_by("due_date")[:25]
+        context["projects"] = Project.objects.filter(status="admin_approved").order_by("-created_at")[:25]
+
+        return render(request, "employee/PSDE.html", context=context)
 
     # TODO add conditions for other employee types

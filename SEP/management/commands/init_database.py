@@ -13,10 +13,10 @@ class Command(BaseCommand):
             ("CSM", "Customer Service Manager"),
             ("FIM", "Financial Manager"),
             ("ADM", "Administration Dpt Manager"),
-            ("PDE", "Production Dpt Manager"),
-            ("PDM", "Production Dpt Employee"),
-            ("SDE", "Service Dpt Manager"),
-            ("SDM", "Service Dpt Employee"),
+            ("PDE", "Production Dpt Employee"),
+            ("PDM", "Production Dpt Manager"),
+            ("SDE", "Service Dpt Employee"),
+            ("SDM", "Service Dpt Manager"),
         ]:
             _, created = Role.objects.get_or_create(id=role_id, name=role_name)
             if created:
@@ -143,7 +143,7 @@ class Command(BaseCommand):
                     first_name=f"{team.name.capitalize()}",
                     last_name=f"{i}",
                     email=f"{team.name}{i}@sep.se",
-                    role=Role.objects.get(id="PDM"),
+                    role=Role.objects.get(id="PDE"),
                 )
 
                 if created:
@@ -162,7 +162,7 @@ class Command(BaseCommand):
                     first_name=f"{team.name.capitalize()}",
                     last_name=f"{i}",
                     email=f"{team.name}{i}@sep/.se",
-                    role=Role.objects.get(id="SDM"),
+                    role=Role.objects.get(id="SDE"),
                 )
 
                 if created:

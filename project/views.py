@@ -1,10 +1,11 @@
+from django.core.handlers.asgi import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from project.models import RawRequest, Project
+from project.models import RawRequest, Project, Task
 from project.forms import ProjectInitialForm, FinancialFeedbackForm, TaskAssignmentForm
 
 from SEP.models import Customer, Team
@@ -211,3 +212,14 @@ def psdm_team_action(request, project_id, team_id):
     }
 
     return render(request, "psdm_task_create.html", context=context)
+
+
+@login_required
+def task_detail(request, project_id: int, task_id: int):
+    project = get_object_or_404(Project, id=project_id)
+    task = get_object_or_404(Task, id=task_id)
+
+    if task.project != project:
+        return HttpResponseBadRequest("Invalid tak & project id combination")
+
+    return render(request, "task_detail.html", context={"task": task})

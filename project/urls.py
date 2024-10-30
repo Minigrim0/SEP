@@ -12,4 +12,5 @@ urlpatterns = [
     path('<int:project_id>/adm-action', views.adm_action, name="adm_action"),  # View for the Admin to approve/reject a project
     path('<int:project_id>/psdm-action', views.psdm_action, name="psdm_action"),  # View for the P/SDM to navigate to tasks assignment per team
     path('<int:project_id>/psdm-action/<int:team_id>/', views.psdm_team_action, name="psdm_team_action"),  # View for the P/SDM to assign tasks to a team's members
+    path('<int:project_id>/tasks/<int:task_id>', views.task_detail, name="task_detail")
 ]
